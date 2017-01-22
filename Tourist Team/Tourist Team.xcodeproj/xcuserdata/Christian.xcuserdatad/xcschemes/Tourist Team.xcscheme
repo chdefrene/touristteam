@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA450D0E1E2E415F00002515"
-               BuildableName = "TouristTeam.app"
-               BlueprintName = "TouristTeam"
-               ReferencedContainer = "container:TouristTeam.xcodeproj">
+               BlueprintIdentifier = "AAF595D71E352C5F000C11A4"
+               BuildableName = "Tourist Team.app"
+               BlueprintName = "Tourist Team"
+               ReferencedContainer = "container:Tourist Team.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,34 +28,14 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA450D261E2E416000002515"
-               BuildableName = "TouristTeamTests.xctest"
-               BlueprintName = "TouristTeamTests"
-               ReferencedContainer = "container:TouristTeam.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA450D311E2E416000002515"
-               BuildableName = "TouristTeamUITests.xctest"
-               BlueprintName = "TouristTeamUITests"
-               ReferencedContainer = "container:TouristTeam.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA450D0E1E2E415F00002515"
-            BuildableName = "TouristTeam.app"
-            BlueprintName = "TouristTeam"
-            ReferencedContainer = "container:TouristTeam.xcodeproj">
+            BlueprintIdentifier = "AAF595D71E352C5F000C11A4"
+            BuildableName = "Tourist Team.app"
+            BlueprintName = "Tourist Team"
+            ReferencedContainer = "container:Tourist Team.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -75,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA450D0E1E2E415F00002515"
-            BuildableName = "TouristTeam.app"
-            BlueprintName = "TouristTeam"
-            ReferencedContainer = "container:TouristTeam.xcodeproj">
+            BlueprintIdentifier = "AAF595D71E352C5F000C11A4"
+            BuildableName = "Tourist Team.app"
+            BlueprintName = "Tourist Team"
+            ReferencedContainer = "container:Tourist Team.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -94,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA450D0E1E2E415F00002515"
-            BuildableName = "TouristTeam.app"
-            BlueprintName = "TouristTeam"
-            ReferencedContainer = "container:TouristTeam.xcodeproj">
+            BlueprintIdentifier = "AAF595D71E352C5F000C11A4"
+            BuildableName = "Tourist Team.app"
+            BlueprintName = "Tourist Team"
+            ReferencedContainer = "container:Tourist Team.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

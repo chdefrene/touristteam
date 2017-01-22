@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  TouristTeam
+//  Tourist Team
 //
-//  Created by Christian De Frène on 17.01.2017.
+//  Created by Christian De Frène on 22.01.2017.
 //  Copyright © 2017 eurecom. All rights reserved.
 //
 

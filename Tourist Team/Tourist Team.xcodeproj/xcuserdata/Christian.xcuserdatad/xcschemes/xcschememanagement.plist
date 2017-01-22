@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>TouristTeam.xcscheme</key>
+		<key>Tourist Team.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,17 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>AA450D0E1E2E415F00002515</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AA450D261E2E416000002515</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AA450D311E2E416000002515</key>
+		<key>AAF595D71E352C5F000C11A4</key>
 		<dict>
 			<key>primary</key>
 			<true/>

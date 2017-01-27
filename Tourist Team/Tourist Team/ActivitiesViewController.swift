@@ -7,42 +7,97 @@
 //
 
 import UIKit
+import MapKit
+//import CoreData
 
-class FirstViewController: UIViewController {
+// MARK: - MapView
+
+class MapViewController: UIViewController, MKMapViewDelegate {
+    // Variables and constants
+    
+    // Set location and view angle to Antibes
+    let initialLocation = CLLocation(latitude: 43.580022, longitude: 7.124758)
+    let regionRadius: CLLocationDistance = 1500.0
+    
+    // Manages user GPS location
+    var locationManager: CLLocationManager!
     
     // Outlets and actions
+    @IBOutlet weak var mapView: MKMapView!
     
-    @IBOutlet weak var mapListControl: UISegmentedControl!
     
-    @IBOutlet weak var label: UILabel!
     
-    @IBAction func indexChanged(_ sender: AnyObject) {
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        switch mapListControl.selectedSegmentIndex {
+        // Set up map and features
+        centerMapOnLocation(location: initialLocation)
+        mapView.userTrackingMode = .follow
+    }
+    
+    // Centers map on given location
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+}
+
+
+
+
+
+class FirstViewController: UIViewController {//, UITableViewController, MKMapViewDelegate {
+    
+    //*******  TESTING START   ***********
+    
+    
+    
+    
+    
+    
+    
+    //*******   TESTING END    ***********
+    
+    
+    
+    
+    // Outlets and actions
+    @IBOutlet weak var tableViewContainer: UIView!
+    @IBOutlet weak var mapViewContainer: UIView!
+    @IBOutlet weak var listAndMapSwitcher: UISegmentedControl!
+    
+    
+    
+    
+    
+    @IBAction func switchBetweenListAndMap(sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
         case 0:
-            label.text = "List selected"
+            UIView.animate(withDuration: 0.3, animations: {
+                self.tableViewContainer.alpha = 1
+                self.mapViewContainer.alpha = 0
+            })
         case 1:
-            label.text = "Map selected"
+            UIView.animate(withDuration: 0.3, animations: {
+                self.mapViewContainer.alpha = 1
+                self.tableViewContainer.alpha = 0
+            })
         default:
             break
         }
     }
-    
-    
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        label.text = "List selected"
+        
+        
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
 
 
 }

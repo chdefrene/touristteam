@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA9CD7261E3B718600BD3CD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA9CD7251E3B718600BD3CD6 /* CoreData.framework */; };
+		AAA4AABE1E366D350020320C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAA4AABD1E366D350020320C /* MapKit.framework */; };
 		AAF595DC1E352C5F000C11A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595DB1E352C5F000C11A4 /* AppDelegate.swift */; };
 		AAF595DE1E352C5F000C11A4 /* ActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595DD1E352C5F000C11A4 /* ActivitiesViewController.swift */; };
 		AAF595E01E352C5F000C11A4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595DF1E352C5F000C11A4 /* TeamViewController.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA9CD7251E3B718600BD3CD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		AAA4AABD1E366D350020320C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AAF595D81E352C5F000C11A4 /* Tourist Team.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tourist Team.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF595DB1E352C5F000C11A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAF595DD1E352C5F000C11A4 /* ActivitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesViewController.swift; sourceTree = "<group>"; };
@@ -33,17 +37,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA9CD7261E3B718600BD3CD6 /* CoreData.framework in Frameworks */,
+				AAA4AABE1E366D350020320C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AAA4AABC1E366D350020320C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA9CD7251E3B718600BD3CD6 /* CoreData.framework */,
+				AAA4AABD1E366D350020320C /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AAF595CF1E352C5F000C11A4 = {
 			isa = PBXGroup;
 			children = (
 				AAF595DA1E352C5F000C11A4 /* Tourist Team */,
 				AAF595D91E352C5F000C11A4 /* Products */,
+				AAA4AABC1E366D350020320C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,6 +120,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 54F5KF92YX;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

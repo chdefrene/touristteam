@@ -8,12 +8,18 @@
 
 import UIKit
 import MapKit
-//import CoreData
+import CoreData
+
+
+// MARK: - Global variables and constants
+fileprivate var activities:[Activity] = []
+//var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
+
+
 
 // MARK: - MapView
 
 class MapViewController: UIViewController, MKMapViewDelegate {
-    // Variables and constants
     
     // Set location and view angle to Antibes
     let initialLocation = CLLocation(latitude: 43.580022, longitude: 7.124758)
@@ -43,33 +49,70 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 }
 
 
+// MARK: - Tableview cell
+
+class ActivityTableViewCell: UITableViewCell {
+    
+    @IBOutlet var activityTitleOutlet: UILabel!
+    @IBOutlet var activityInfoOutlet: UILabel!
+    @IBOutlet var activityImageOutlet: UIImageView!
+}
+
+// MARK: - Tableview
+
+class TableViewController: UITableViewController {
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Make the cell self size
+        tableView.estimatedRowHeight = 66.0
+        tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // Return the number of sections.
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return activities.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityCell", for: indexPath) as! ActivityTableViewCell
+        
+        // Configure the cell...
+        //cell.nameLabel.text = menuItems[indexPath.row].name
+        cell.activityTitleOutlet.text = activities[indexPath.row].name
+        //cell.detailLabel.text = menuItems[indexPath.row].detail
+        cell.activityInfoOutlet.text = activities[indexPath.row].information
+        //cell.priceLabel.text = "$\(menuItems[indexPath.row].price as! Double)"
+        
+        return cell
+        
+    }
+    
+    
+    
+    
+}
 
 
 
-class FirstViewController: UIViewController {//, UITableViewController, MKMapViewDelegate {
-    
-    //*******  TESTING START   ***********
-    
-    
-    
-    
-    
-    
-    
-    //*******   TESTING END    ***********
-    
-    
-    
-    
+
+// MARK: - General setup
+
+class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDelegate {
+
     // Outlets and actions
     @IBOutlet weak var tableViewContainer: UIView!
     @IBOutlet weak var mapViewContainer: UIView!
     @IBOutlet weak var listAndMapSwitcher: UISegmentedControl!
     
-    
-    
-    
-    
+
     @IBAction func switchBetweenListAndMap(sender: UISegmentedControl) {
         
         switch sender.selectedSegmentIndex {
@@ -91,14 +134,19 @@ class FirstViewController: UIViewController {//, UITableViewController, MKMapVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-        
-        
-        
+        // Core data managed context
+        if let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext {
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
+            do {
+                activities = try managedObjectContext.fetch(fetchRequest) as! [Activity]
+            } catch {
+                print("Failed to retrieve record")
+                print(error)
+            }
+        }
     }
-    
-
 
 }
 

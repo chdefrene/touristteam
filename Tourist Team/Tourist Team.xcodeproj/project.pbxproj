@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA661FB31E3D28920081B5CA /* csvparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA661FB21E3D28920081B5CA /* csvparser.swift */; };
+		AA661FB61E3D29550081B5CA /* activityData.csv in Resources */ = {isa = PBXBuildFile; fileRef = AA661FB51E3D29550081B5CA /* activityData.csv */; };
 		AA9CD7261E3B718600BD3CD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA9CD7251E3B718600BD3CD6 /* CoreData.framework */; };
+		AA9CD7291E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AA9CD7271E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld */; };
 		AAA4AABE1E366D350020320C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAA4AABD1E366D350020320C /* MapKit.framework */; };
 		AAF595DC1E352C5F000C11A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595DB1E352C5F000C11A4 /* AppDelegate.swift */; };
 		AAF595DE1E352C5F000C11A4 /* ActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595DD1E352C5F000C11A4 /* ActivitiesViewController.swift */; };
@@ -19,7 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA661FB21E3D28920081B5CA /* csvparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = csvparser.swift; sourceTree = "<group>"; };
+		AA661FB51E3D29550081B5CA /* activityData.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = activityData.csv; sourceTree = "<group>"; };
 		AA9CD7251E3B718600BD3CD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		AA9CD7281E3B726D00BD3CD6 /* TouristTeam.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouristTeam.xcdatamodel; sourceTree = "<group>"; };
 		AAA4AABD1E366D350020320C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		AAF595D81E352C5F000C11A4 /* Tourist Team.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tourist Team.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAF595DB1E352C5F000C11A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +51,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA661FB41E3D28990081B5CA /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				AAF595E61E352C5F000C11A4 /* LaunchScreen.storyboard */,
+				AAF595E91E352C5F000C11A4 /* Info.plist */,
+				AA661FB21E3D28920081B5CA /* csvparser.swift */,
+				AA661FB51E3D29550081B5CA /* activityData.csv */,
+			);
+			name = "Supporting files";
+			sourceTree = "<group>";
+		};
 		AAA4AABC1E366D350020320C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -57,9 +74,9 @@
 		AAF595CF1E352C5F000C11A4 = {
 			isa = PBXGroup;
 			children = (
-				AAF595DA1E352C5F000C11A4 /* Tourist Team */,
-				AAF595D91E352C5F000C11A4 /* Products */,
 				AAA4AABC1E366D350020320C /* Frameworks */,
+				AAF595D91E352C5F000C11A4 /* Products */,
+				AAF595DA1E352C5F000C11A4 /* Tourist Team */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,8 +97,8 @@
 				AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */,
 				AAF595E11E352C5F000C11A4 /* Main.storyboard */,
 				AAF595E41E352C5F000C11A4 /* Assets.xcassets */,
-				AAF595E61E352C5F000C11A4 /* LaunchScreen.storyboard */,
-				AAF595E91E352C5F000C11A4 /* Info.plist */,
+				AA9CD7271E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld */,
+				AA661FB41E3D28990081B5CA /* Supporting files */,
 			);
 			path = "Tourist Team";
 			sourceTree = "<group>";
@@ -152,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAF595E81E352C5F000C11A4 /* LaunchScreen.storyboard in Resources */,
+				AA661FB61E3D29550081B5CA /* activityData.csv in Resources */,
 				AAF595E51E352C5F000C11A4 /* Assets.xcassets in Resources */,
 				AAF595E31E352C5F000C11A4 /* Main.storyboard in Resources */,
 			);
@@ -164,8 +182,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA9CD7291E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld in Sources */,
 				AAF595E01E352C5F000C11A4 /* TeamViewController.swift in Sources */,
 				AAF595DC1E352C5F000C11A4 /* AppDelegate.swift in Sources */,
+				AA661FB31E3D28920081B5CA /* csvparser.swift in Sources */,
 				AAF595F01E353B10000C11A4 /* ProfileViewController.swift in Sources */,
 				AAF595DE1E352C5F000C11A4 /* ActivitiesViewController.swift in Sources */,
 			);
@@ -332,6 +352,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AA9CD7271E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AA9CD7281E3B726D00BD3CD6 /* TouristTeam.xcdatamodel */,
+			);
+			currentVersion = AA9CD7281E3B726D00BD3CD6 /* TouristTeam.xcdatamodel */;
+			path = TouristTeam.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AAF595D01E352C5F000C11A4 /* Project object */;
 }

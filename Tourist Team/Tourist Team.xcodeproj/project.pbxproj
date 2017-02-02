@@ -19,6 +19,8 @@
 		AAF595E51E352C5F000C11A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAF595E41E352C5F000C11A4 /* Assets.xcassets */; };
 		AAF595E81E352C5F000C11A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAF595E61E352C5F000C11A4 /* LaunchScreen.storyboard */; };
 		AAF595F01E353B10000C11A4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */; };
+		C2B039A01E438926005AE251 /* TouristTeam1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C2B0399F1E438926005AE251 /* TouristTeam1.jpg */; };
+		C2B039A21E439263005AE251 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B039A11E439263005AE251 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		AAF595E71E352C5F000C11A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AAF595E91E352C5F000C11A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		C2B0399F1E438926005AE251 /* TouristTeam1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = TouristTeam1.jpg; sourceTree = "<group>"; };
+		C2B039A11E439263005AE251 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,9 +99,11 @@
 				AAF595DD1E352C5F000C11A4 /* ActivitiesViewController.swift */,
 				AAF595DF1E352C5F000C11A4 /* TeamViewController.swift */,
 				AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */,
+				C2B039A11E439263005AE251 /* LoginViewController.swift */,
 				AAF595E11E352C5F000C11A4 /* Main.storyboard */,
 				AAF595E41E352C5F000C11A4 /* Assets.xcassets */,
 				AA9CD7271E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld */,
+				C2B0399F1E438926005AE251 /* TouristTeam1.jpg */,
 				AA661FB41E3D28990081B5CA /* Supporting files */,
 			);
 			path = "Tourist Team";
@@ -170,6 +176,7 @@
 			files = (
 				AAF595E81E352C5F000C11A4 /* LaunchScreen.storyboard in Resources */,
 				AA661FB61E3D29550081B5CA /* activityData.csv in Resources */,
+				C2B039A01E438926005AE251 /* TouristTeam1.jpg in Resources */,
 				AAF595E51E352C5F000C11A4 /* Assets.xcassets in Resources */,
 				AAF595E31E352C5F000C11A4 /* Main.storyboard in Resources */,
 			);
@@ -182,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2B039A21E439263005AE251 /* LoginViewController.swift in Sources */,
 				AA9CD7291E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld in Sources */,
 				AAF595E01E352C5F000C11A4 /* TeamViewController.swift in Sources */,
 				AAF595DC1E352C5F000C11A4 /* AppDelegate.swift in Sources */,

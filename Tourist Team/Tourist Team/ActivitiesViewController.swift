@@ -12,7 +12,12 @@ import CoreData
 
 
 // MARK: - Global variables and constants
-fileprivate var activities:[Activity] = []
+let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+
+fileprivate var activities:[Activity] = appDelegate.getActivity()
+
+
 //var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
 
 
@@ -84,12 +89,23 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ActivityCell", for: indexPath) as! ActivityTableViewCell
         
+        
         // Configure the cell...
         //cell.nameLabel.text = menuItems[indexPath.row].name
+        //cell.activityTitleOutlet.text = activities[indexPath.row].name
         cell.activityTitleOutlet.text = activities[indexPath.row].name
+
+        
+        
+        
         //cell.detailLabel.text = menuItems[indexPath.row].detail
+        //cell.activityInfoOutlet.text = activities[indexPath.row].information
         cell.activityInfoOutlet.text = activities[indexPath.row].information
+
         //cell.priceLabel.text = "$\(menuItems[indexPath.row].price as! Double)"
+        //cell.activityImageOutlet.image = UIImage()
+        cell.activityImageOutlet?.image = UIImage(named: activities[indexPath.row].image!)
+        
         
         return cell
         
@@ -135,17 +151,6 @@ class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Core data managed context
-        if let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.managedObjectContext {
-            
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
-            do {
-                activities = try managedObjectContext.fetch(fetchRequest) as! [Activity]
-            } catch {
-                print("Failed to retrieve record")
-                print(error)
-            }
-        }
     }
 
 }

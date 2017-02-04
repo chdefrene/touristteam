@@ -14,11 +14,7 @@ import CoreData
 // MARK: - Global variables and constants
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
-
 fileprivate var activities:[Activity] = appDelegate.getActivity()
-
-
-//var fetchResultController:NSFetchedResultsController<NSFetchRequestResult>!
 
 
 
@@ -70,10 +66,6 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Make the cell self size
-        tableView.estimatedRowHeight = 66.0
-        tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -91,19 +83,8 @@ class TableViewController: UITableViewController {
         
         
         // Configure the cell...
-        //cell.nameLabel.text = menuItems[indexPath.row].name
-        //cell.activityTitleOutlet.text = activities[indexPath.row].name
         cell.activityTitleOutlet.text = activities[indexPath.row].name
-
-        
-        
-        
-        //cell.detailLabel.text = menuItems[indexPath.row].detail
-        //cell.activityInfoOutlet.text = activities[indexPath.row].information
         cell.activityInfoOutlet.text = activities[indexPath.row].information
-
-        //cell.priceLabel.text = "$\(menuItems[indexPath.row].price as! Double)"
-        //cell.activityImageOutlet.image = UIImage()
         cell.activityImageOutlet?.image = UIImage(named: activities[indexPath.row].image!)
         
         
@@ -111,9 +92,14 @@ class TableViewController: UITableViewController {
         
     }
     
-    
-    
-    
+    // Pass the indexPath variable to the detail view
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let IndexPath = self.tableView.indexPathForSelectedRow {
+            let controller = segue.destination as! DetailViewController
+            controller.selectedIndex = IndexPath.row
+        }
+    }
 }
 
 
@@ -150,8 +136,29 @@ class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
-
 }
+
+
+
+class DetailViewController: UIViewController {
+    
+    var selectedIndex = 0
+    
+    @IBOutlet weak var detailImageOutlet: UIImageView!
+    @IBOutlet weak var detailNameOutlet: UILabel!
+    @IBOutlet weak var detailInformationOutlet: UILabel!
+    
+    override func viewDidLoad() {
+    
+        super.viewDidLoad()
+        
+        detailImageOutlet.image = UIImage(named: activities[selectedIndex].image!)
+        detailNameOutlet.text = activities[selectedIndex].name
+        detailInformationOutlet.text = activities[selectedIndex].information
+    }
+    
+}
+
+
 

@@ -37,5 +37,11 @@ class LoginViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func loginAction(_ sender: Any) {
+        print ("add functionality here")
+    
+    }
+    
 
 }

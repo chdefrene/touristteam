@@ -12,9 +12,10 @@ import CoreData
 
 
 // MARK: - Global variables and constants
-let appDelegate = UIApplication.shared.delegate as! AppDelegate
+let activityAppDelegate = UIApplication.shared.delegate as! AppDelegate
 
-fileprivate var activities:[Activity] = appDelegate.getActivity()
+fileprivate var activities:[Activity] = activityAppDelegate.getActivity()
+fileprivate var teams:[Team] = activityAppDelegate.getTeam()
 
 
 
@@ -136,6 +137,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 }
 
@@ -148,14 +150,123 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailImageOutlet: UIImageView!
     @IBOutlet weak var detailNameOutlet: UILabel!
     @IBOutlet weak var detailInformationOutlet: UILabel!
+    @IBOutlet weak var detailLinkOutlet: UIButton!
+    @IBOutlet weak var detailLinklabelOutlet: UILabel!
+    @IBOutlet weak var teamupButtonOutlet: UIButton!
+    
+    
+    
+    @IBAction func linkTapped(_ sender: Any) {
+        let targetURL = NSURL(string: activities[selectedIndex].link!)
+        UIApplication.shared.open(targetURL as! URL)
+        
+    }
+    
+    @IBAction func teamUp(_ sender: Any) {
+    }
+    
+    
+    
+    
     
     override func viewDidLoad() {
     
         super.viewDidLoad()
         
-        detailImageOutlet.image = UIImage(named: activities[selectedIndex].image!)
-        detailNameOutlet.text = activities[selectedIndex].name
-        detailInformationOutlet.text = activities[selectedIndex].information
+        // Get selected activity
+        let object = activities[selectedIndex]
+        
+        // Display activity image
+        if object.image != nil {
+            detailImageOutlet.image = UIImage(named: object.image!)
+        }
+        
+        // Display activity name and info
+        detailNameOutlet.text = object.name
+        detailInformationOutlet.text = object.information
+        
+        // Display link if provided. If not, hide the fields
+        if Int(object.link!) == 0 {
+            detailLinkOutlet.setTitle("No webpage available", for: .normal)
+            detailLinkOutlet.isEnabled = false
+        } else {
+            detailLinklabelOutlet.isHidden = false
+            detailLinkOutlet.setTitle(object.link, for: .normal)
+        }
+        
+        // Modify the "team up" with rounded edges
+        teamupButtonOutlet.layer.cornerRadius = 10.0
+        
+    }
+    
+    
+    // Pass the indexPath variable to the team chooser view
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! TeamChooserController
+        controller.selectedIndex = selectedIndex
+    }
+    
+}
+
+
+class TeamTableViewCell: UITableViewCell {
+    
+    @IBOutlet var teamTitleOutlet: UILabel!
+    @IBOutlet var teamFreeSpacesOutlet: UILabel!
+    @IBOutlet var teamAgeGroupOutlet: UILabel!
+    @IBOutlet var teamLanguagesOutlet: UILabel!
+    @IBOutlet var teamMixedGendersOutlet: UILabel!
+}
+
+
+class TeamChooserController: UITableViewController{
+    
+    var selectedIndex = 0
+    
+    /*let simpleLangaugeShortener = ["English": "EN",
+                                   "French": "FR",
+                                   "Norgwegian": "NO"]*/
+    
+    
+    @IBOutlet weak var teamTableOutlet: UITableView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // Return the number of sections.
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return teams.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TeamCell", for: indexPath) as! TeamTableViewCell
+        
+        
+        // Configure the cell...
+        cell.teamTitleOutlet.text = teams[indexPath.row].name
+        cell.teamAgeGroupOutlet.text = "Ages: " + teams[indexPath.row].age_group!
+        
+        if teams[indexPath.row].mixed_genders == true {
+            cell.teamMixedGendersOutlet.text = "Mixed"
+        } else {
+            cell.teamMixedGendersOutlet.text = "Non-mixed"
+        }
+        
+        cell.teamFreeSpacesOutlet.text = "Free: \(teams[indexPath.row].max_users - teams[indexPath.row].current_users)"
+        
+        
+        cell.teamLanguagesOutlet.text = teams[indexPath.row].common_languages
+
+        
+        
+        return cell
+        
     }
     
 }

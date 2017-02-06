@@ -12,10 +12,9 @@ import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         preloadDataFromFile()
@@ -86,6 +85,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data custom methods
     // As described here: https://learnappdevelopment.com/uncategorized/how-to-use-core-data-in-ios-10-swift-3/
     
+    
+    
+    
+    // ============================================================
+    // =====================  ACTIVITY  ===========================
+    // ============================================================
+    
+    
+    func getActivity() -> [Activity] {
+        
+        // Create a fetch request
+        let fetchRequest: NSFetchRequest<Activity> = Activity.fetchRequest()
+        
+        do {
+            // Get the results
+            let activity = try getContext().fetch(fetchRequest)
+            
+            return activity
+            
+        } catch {
+            fatalError("Error with request: \(error)")
+        }
+    }
+    
+    
     func storeActivity ( name: String,
                          latitude: Double,
                          longitude: Double,
@@ -114,62 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func getActivity () -> [Activity] {
-        
-        // Create a fetch request
-        let fetchRequest: NSFetchRequest<Activity> = Activity.fetchRequest()
-        
-        do {
-            // Get the results
-            let activity = try getContext().fetch(fetchRequest)
-            
-            return activity
-            
-        } catch {
-            fatalError("Error with request: \(error)")
-        }
-    }
-    
-    
-    
-    // MARK: - Auxiliary functions
-    
-    func preloadDataFromFile() {
-        
-        // Clear data already in listview
-        removeData()
-        
-        // Set filepath for data file
-        let csvPath = Bundle.main.path(forResource: "activityData", ofType: "csv")
-        
-        // No data file was found; exit method
-        if csvPath == nil {
-            fatalError("No data file found!")
-        }
-        
-        // Instantiate data varaible to hold row data
-        var csvData:String? = nil
-
-        
-        // Scan through data file, storing each row in the Core Data model
-        do {
-            csvData = try String(contentsOfFile: csvPath!,
-                                 encoding: String.Encoding.utf8)
-            
-            // Call the csvRows method from the csvparser.swift helper file
-            let csvRows = csvData?.csvRows()
-            for row in csvRows! {
-                
-                // Store scanned data in data model
-                self.storeActivity( name: row[0], latitude: Double(row[1])!, longitude: Double(row[2])!,information: row[3], link: row[4], image: row[5] )
-            }
-        } catch {
-            print(error)
-        }
-    }
-    
-    
-    func removeData() {
+    func removeActivitiesData() {
         // Remove the existing items
         let context = self.getContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
@@ -184,6 +153,133 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Failed to retrieve record: \(e!.localizedDescription)")
         }
     }
+    
+    
+
+    
+    
+    // ============================================================
+    // =======================  TEAM  =============================
+    // ============================================================
+    
+    
+    func getTeam() -> [Team] {
+        
+        // Create a fetch request
+        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        
+        do {
+            // Get the results
+            let team = try getContext().fetch(fetchRequest)
+            
+            return team
+            
+        } catch {
+            fatalError("Error with request: \(error)")
+        }
+        
+    }
+    
+    func storeTeam ( name: String,
+                     currentUsers: Int16,
+                     maxUsers: Int16,
+                     ageGroup: String,
+                     mixedGenders: Bool,
+                     commonLanguages: String ) {
+        
+        let context = getContext()
+        
+        let team = NSEntityDescription.insertNewObject(forEntityName: "Team", into: context) as! Team
+        
+        // Set the values
+        team.setValue(name, forKey: "name")
+        team.setValue(currentUsers, forKey: "current_users")
+        team.setValue(maxUsers, forKey: "max_users")
+        team.setValue(ageGroup, forKey: "age_group")
+        team.setValue(mixedGenders, forKey: "mixed_genders")
+        team.setValue(commonLanguages, forKey: "common_languages")
+        
+        // Save object
+        do {
+            try context.save()
+        } catch let error as NSError {
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+    }
+    
+    
+    
+    func removeTeamData() {
+        let context = self.getContext()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Team")
+        
+        do {
+            let teams = try context.fetch(fetchRequest) as! [Team]
+            
+            for team in teams {
+                context.delete(team)
+            }
+        } catch let e as NSError? {
+            print("Failed to retrieve record: \(e!.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
+    
+    // MARK: - Auxiliary functions
+    
+    func preloadDataFromFile() {
+        
+        // Clear data already in listview
+        removeActivitiesData()
+        removeTeamData()
+        
+        // Set filepath for data file
+        let activityCsvPath = Bundle.main.path(forResource: "activityData", ofType: "csv")
+        let teamCsvPath = Bundle.main.path(forResource: "teamData", ofType: "csv")
+        
+        // No data file was found; exit method
+        if activityCsvPath == nil {
+            fatalError("No activity data file found!")
+        }
+        if teamCsvPath == nil {
+            fatalError("No team data file found!")
+        }
+        
+        // Instantiate data varaible to hold row data
+        var activityCsvData:String? = nil
+        var teamCsvData:String? = nil
+       
+        
+        // Scan through data file, storing each row in the Core Data model
+        do {
+            activityCsvData = try String(contentsOfFile: activityCsvPath!,
+                                 encoding: String.Encoding.utf8)
+            teamCsvData = try String(contentsOfFile: teamCsvPath!, encoding: String.Encoding.utf8)
+            
+            // Call the csvRows method from the csvparser.swift helper file
+            let activityCsvRows = activityCsvData?.csvRows()
+            let teamCsvRows = teamCsvData?.csvRows()
+            
+            for row in activityCsvRows! {
+                
+                // Store scanned data in data model
+                self.storeActivity( name: row[0], latitude: Double(row[1])!, longitude: Double(row[2])!,information: row[3], link: row[4], image: row[5] )
+            }
+            
+            for row in teamCsvRows! {
+                
+                self.storeTeam(name: row[0], currentUsers: Int16(row[1])!, maxUsers: Int16(row[2])!, ageGroup: row[3], mixedGenders: Bool(row[4])!, commonLanguages: row[5])
+                
+            }
+            
+        } catch {
+            print(error)
+        }
+    }
+    
     
 
 

@@ -3,27 +3,43 @@
     <entity name="Activity" representedClassName="Activity" syncable="YES" codeGenerationType="class">
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="information" attributeType="String" syncable="YES"/>
-        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" minValueString="-90" maxValueString="90" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" minValueString="-180" maxValueString="180" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="team" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="activity" inverseEntity="Team" syncable="YES"/>
+        <relationship name="fromActivity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TeamActivity" inverseName="activity" inverseEntity="TeamActivity" syncable="YES"/>
     </entity>
     <entity name="Person" representedClassName="Person" syncable="YES" codeGenerationType="class">
-        <attribute name="age" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="age" attributeType="Integer 16" minValueString="0" maxValueString="120" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="languages" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="password" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="team" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="person" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
-        <attribute name="date" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="maxUsers" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="activity" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="team" inverseEntity="Activity" syncable="YES"/>
+        <attribute name="age_group" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="common_languages" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="current_users" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="max_users" attributeType="Integer 16" minValueString="2" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="mixed_genders" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="fromTeam" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TeamActivity" inverseName="team" inverseEntity="TeamActivity" syncable="YES"/>
         <relationship name="person" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="team" inverseEntity="Person" syncable="YES"/>
     </entity>
+    <entity name="TeamActivity" representedClassName="TeamActivity" syncable="YES" codeGenerationType="class">
+        <attribute name="date" attributeType="Date" minDateTimeInterval="508026780" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="end_time" optional="YES" attributeType="Double" minValueString="0" maxValueString="24" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="start_time" optional="YES" attributeType="Double" minValueString="0" maxValueString="24" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="fromActivity" inverseEntity="Activity" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="fromTeam" inverseEntity="Team" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Activity" positionX="-1818" positionY="-1309" width="128" height="148"/>
-        <element name="Team" positionX="-1586" positionY="-1503" width="128" height="103"/>
-        <element name="Person" positionX="-1370" positionY="-1269" width="128" height="103"/>
+        <element name="Activity" positionX="-1946" positionY="-1485" width="128" height="148"/>
+        <element name="Person" positionX="-1388" positionY="-1522" width="128" height="163"/>
+        <element name="Team" positionX="-1586" positionY="-1503" width="128" height="163"/>
+        <element name="TeamActivity" positionX="-1764" positionY="-1485" width="128" height="118"/>
     </elements>
 </model>

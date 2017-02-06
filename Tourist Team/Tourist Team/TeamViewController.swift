@@ -7,8 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
-class SecondViewController: UIViewController {
+
+// MARK: - Global variables and constants
+
+let teamAppDelegate = UIApplication.shared.delegate as! AppDelegate
+
+fileprivate var teams:[Team] = teamAppDelegate.getTeam()
+
+
+
+class TeamViewController: UIViewController {
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

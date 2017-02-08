@@ -13,9 +13,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var Password: UITextField!
     @IBOutlet weak var Loginbtn: UIButton!
     
-    var useraccounts = ["Username": "Password", "User": "pass", "Test": "test"]
-    
-    
+    let useraccounts = ["Username": "Password", "User": "pass", "Test": "test"]
     
     
     override func viewDidLoad() {
@@ -55,7 +53,7 @@ class LoginViewController: UIViewController {
                     //print ("access granted !")
                     
                     // Move to Tab Bar View
-                    performSegue(withIdentifier: "login", sender: nil)
+                    //performSegue(withIdentifier: "login", sender: nil)
                     
                 }else{
                     //print("something wrong with password")
@@ -71,18 +69,28 @@ class LoginViewController: UIViewController {
     func emptyCredentials() -> Void {
         let alertmessage = UIAlertController(title: "Login error", message: "Username or password field is empty, please try again.", preferredStyle: .alert)
         alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
-        present(alertmessage, animated: true, completion: nil)
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
     }
     
     func wrongCredentials() -> Void {
         let alertmessage = UIAlertController(title: "Wrong credentials", message: "Your username and password do not match. Please try again.", preferredStyle: .alert)
         alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
-        present(alertmessage, animated: true, completion: nil)
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
     }
+    
     func wrongUsername() -> Void {
         let alertmessage = UIAlertController(title: "Wrong Username", message: "Your username is typed wrong.", preferredStyle: .alert)
         alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
-        present(alertmessage, animated: true, completion: nil)
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
     }
     
     

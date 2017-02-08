@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA5244E31E4B508B0070BABF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5244E21E4B508B0070BABF /* LoginViewController.swift */; };
 		AA661FB31E3D28920081B5CA /* csvparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA661FB21E3D28920081B5CA /* csvparser.swift */; };
 		AA661FB61E3D29550081B5CA /* activityData.csv in Resources */ = {isa = PBXBuildFile; fileRef = AA661FB51E3D29550081B5CA /* activityData.csv */; };
 		AA9CD7261E3B718600BD3CD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA9CD7251E3B718600BD3CD6 /* CoreData.framework */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA5244E21E4B508B0070BABF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AA661FB21E3D28920081B5CA /* csvparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = csvparser.swift; sourceTree = "<group>"; };
 		AA661FB51E3D29550081B5CA /* activityData.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = activityData.csv; sourceTree = "<group>"; };
 		AA9CD7251E3B718600BD3CD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -98,6 +100,7 @@
 				AAF595DD1E352C5F000C11A4 /* ActivitiesViewController.swift */,
 				AAF595DF1E352C5F000C11A4 /* TeamViewController.swift */,
 				AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */,
+				AA5244E21E4B508B0070BABF /* LoginViewController.swift */,
 				AAF595E11E352C5F000C11A4 /* Main.storyboard */,
 				AAF595E41E352C5F000C11A4 /* Assets.xcassets */,
 				AA9CD7271E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld */,
@@ -186,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA5244E31E4B508B0070BABF /* LoginViewController.swift in Sources */,
 				AA9CD7291E3B726D00BD3CD6 /* TouristTeam.xcdatamodeld in Sources */,
 				AAF595E01E352C5F000C11A4 /* TeamViewController.swift in Sources */,
 				AAF595DC1E352C5F000C11A4 /* AppDelegate.swift in Sources */,

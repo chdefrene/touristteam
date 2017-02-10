@@ -305,10 +305,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Clear data already in listview
         removeActivitiesData()
         removeTeamData()
+        removePersonData()
         
         // Set filepath for data file
         let activityCsvPath = Bundle.main.path(forResource: "activityData", ofType: "csv")
         let teamCsvPath = Bundle.main.path(forResource: "teamData", ofType: "csv")
+        let personCsvPath = Bundle.main.path(forResource: "personData", ofType: "csv")
         
         // No data file was found; exit method
         if activityCsvPath == nil {
@@ -317,10 +319,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if teamCsvPath == nil {
             fatalError("No team data file found!")
         }
+        if personCsvPath == nil {
+            fatalError("No person data file found!")
+        }
         
         // Instantiate data varaible to hold row data
         var activityCsvData:String? = nil
         var teamCsvData:String? = nil
+        var personCsvData:String? = nil
        
         
         // Scan through data file, storing each row in the Core Data model
@@ -328,10 +334,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             activityCsvData = try String(contentsOfFile: activityCsvPath!,
                                  encoding: String.Encoding.utf8)
             teamCsvData = try String(contentsOfFile: teamCsvPath!, encoding: String.Encoding.utf8)
+            personCsvData = try String(contentsOfFile: personCsvPath!, encoding: String.Encoding.utf8)
             
             // Call the csvRows method from the csvparser.swift helper file
             let activityCsvRows = activityCsvData?.csvRows()
             let teamCsvRows = teamCsvData?.csvRows()
+            let personCsvRows = personCsvData?.csvRows()
             
             for row in activityCsvRows! {
                 
@@ -345,16 +353,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
             }
             
+            for row in personCsvRows! {
+                
+                self.storePerson(age: Int16(row[0])!, gender: row[1], image: row[2], languages: row[3], name: row[4], password: row[5], username: row[6])
+            }
+            
         } catch {
             print(error)
         }
     }
     
-    
-    
-    // ============================================================
-    // =======================  PERSON  ===========================
-    // ============================================================
     
     
 

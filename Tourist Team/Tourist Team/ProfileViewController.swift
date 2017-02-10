@@ -41,7 +41,7 @@ class ThirdViewController: UIViewController {
             if person.username == selectedPerson{
                 object = person
             }else{
-                print("Person not found")
+                //print("Person not found")
             }
         }
         

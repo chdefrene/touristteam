@@ -225,6 +225,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    // ============================================================
+    // =======================  PERSON  ===========================
+    // ============================================================
+    
+    func getPerson() -> [Person] {
+        
+        // Create a fetch request
+        let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+        
+        do {
+            // Get the results
+            let person = try getContext().fetch(fetchRequest)
+            
+            return person
+            
+        } catch {
+            fatalError("Error with request: \(error)")
+        }
+        
+    }
+    
+    func storePerson ( age: Int16,
+                     gender: String,
+                     image: String,
+                     languages: String,
+                     name: String,
+                     password: String,
+                     username: String) {
+        
+        let context = getContext()
+        
+        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
+        
+        // Set the values
+        person.setValue(age, forKey: "age")
+        person.setValue(gender, forKey: "gender")
+        person.setValue(image, forKey: "image")
+        person.setValue(languages, forKey: "languages")
+        person.setValue(name, forKey: "name")
+        person.setValue(password, forKey: "password")
+        person.setValue(username, forKey: "username")
+        
+        // Save object
+        do {
+            try context.save()
+        } catch let error as NSError {
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+    }
+    
+    
+    
+    func removePersonData() {
+        let context = self.getContext()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        
+        do {
+            let persons = try context.fetch(fetchRequest) as! [Person]
+            
+            for person in persons {
+                context.delete(person)
+            }
+        } catch let e as NSError? {
+            print("Failed to retrieve record: \(e!.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
     
     
     
@@ -279,6 +349,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(error)
         }
     }
+    
+    
+    
+    // ============================================================
+    // =======================  PERSON  ===========================
+    // ============================================================
     
     
 

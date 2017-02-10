@@ -269,6 +269,62 @@ class TeamChooserController: UITableViewController{
         
     }
     
+    // Pass the indexPath variable to the team chooser view
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! JoinTeamController
+        if let IndexPath = self.tableView.indexPathForSelectedRow {
+            controller.selectedIndex = IndexPath.row
+        }
+    }
+    
+}
+
+
+class JoinTeamController: UIViewController {
+    
+    @IBOutlet weak var TeamNameOutlet: UILabel!
+    @IBOutlet weak var AgeGroupOutlet: UILabel!
+    @IBOutlet weak var MixedGendersOutlet: UILabel!
+    @IBOutlet weak var FreeSpacesOutlet: UILabel!
+    @IBOutlet weak var CommonLanguagesOutlet: UILabel!
+    
+    @IBOutlet weak var JoinTeamButtonOutlet: UIButton!
+    
+    
+    var selectedIndex = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Get selected activity
+        let object = teams[selectedIndex]
+        
+        TeamNameOutlet.text = object.name
+        AgeGroupOutlet.text = "Ages " + object.age_group!
+        
+        if object.mixed_genders {
+            MixedGendersOutlet.text = "Mixed genders"
+        } else {
+            MixedGendersOutlet.text = "Non-mixed genders"
+        }
+        
+        let freeSpaces = object.max_users - object.current_users
+        if freeSpaces == 0 {
+            FreeSpacesOutlet.text = "Team is full"
+        } else {
+            FreeSpacesOutlet.text = "\(freeSpaces) spaces left"
+        }
+        
+        CommonLanguagesOutlet.text = "Common languages: " + object.common_languages!
+        
+        // Modify the "team up" with rounded edges
+        JoinTeamButtonOutlet.layer.cornerRadius = 10.0
+    }
+    
+    
+    
+    
+    
 }
 
 

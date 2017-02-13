@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 
 @UIApplicationMain
@@ -18,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         preloadDataFromFile()
+        preloadDataFromServer()
         
         return true
     }
@@ -230,38 +232,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Auxiliary functions
     
+    
+    // Preload activities and users from local data files
+    // These are static, so they are not on the server
     func preloadDataFromFile() {
         
         // Clear data already in listview
         removeActivitiesData()
-        removeTeamData()
+        //removeTeamData()
         
         // Set filepath for data file
         let activityCsvPath = Bundle.main.path(forResource: "activityData", ofType: "csv")
-        let teamCsvPath = Bundle.main.path(forResource: "teamData", ofType: "csv")
+        //let teamCsvPath = Bundle.main.path(forResource: "teamData", ofType: "csv")
         
         // No data file was found; exit method
         if activityCsvPath == nil {
             fatalError("No activity data file found!")
         }
-        if teamCsvPath == nil {
+        /*if teamCsvPath == nil {
             fatalError("No team data file found!")
-        }
+        }*/
         
         // Instantiate data varaible to hold row data
         var activityCsvData:String? = nil
-        var teamCsvData:String? = nil
+        //var teamCsvData:String? = nil
        
         
         // Scan through data file, storing each row in the Core Data model
         do {
             activityCsvData = try String(contentsOfFile: activityCsvPath!,
                                  encoding: String.Encoding.utf8)
-            teamCsvData = try String(contentsOfFile: teamCsvPath!, encoding: String.Encoding.utf8)
+            //teamCsvData = try String(contentsOfFile: teamCsvPath!, encoding: String.Encoding.utf8)
             
             // Call the csvRows method from the csvparser.swift helper file
             let activityCsvRows = activityCsvData?.csvRows()
-            let teamCsvRows = teamCsvData?.csvRows()
+            //let teamCsvRows = teamCsvData?.csvRows()
             
             for row in activityCsvRows! {
                 
@@ -269,18 +274,296 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.storeActivity( name: row[0], latitude: Double(row[1])!, longitude: Double(row[2])!,information: row[3], link: row[4], image: row[5] )
             }
             
-            for row in teamCsvRows! {
-                
-                self.storeTeam(name: row[0], currentUsers: Int16(row[1])!, maxUsers: Int16(row[2])!, ageGroup: row[3], mixedGenders: Bool(row[4])!, commonLanguages: row[5])
-                
-            }
-            
         } catch {
             print(error)
         }
     }
     
+    // Preload team data from server
+    // When you join a team or create a new one, this function 
+    // enables other users to receive the updated information
+    func preloadDataFromServer() {
+        
+        //print("Preload from server called")
+        
+        // Clear previously fetched data
+        removeTeamData()
+        
+        // Set up URL request
+        let teamDataServerString = "http://tourist-team.appspot.com/teamlist?respType=json"
+        
+        guard let teamUrl = URL(string: teamDataServerString) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let teamUrlRequest = URLRequest(url: teamUrl)
+        
+        // Set up session
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // Make request to server
+        let task = session.dataTask(with: teamUrlRequest) {
+            (data, response, error) in
+            
+            // Check for errors
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            
+            // Parse result as JSON
+            do {
+                guard let parsedData = try? JSONSerialization.jsonObject(with: data!, options: []) as? [NSObject] else {
+                    print("error trying to convert data to JSON")
+                    return
+                }
+                
+                for team in parsedData! {
+                    self.storeTeam(name: team.value(forKey: "name")! as! String,
+                                   currentUsers: Int16((team.value(forKey: "current_users")! as! NSString).doubleValue),
+                                   maxUsers: Int16((team.value(forKey: "max_users")! as! NSString).doubleValue),
+                                   ageGroup: team.value(forKey: "age_group")! as! String,
+                                   mixedGenders: Bool((team.value(forKey: "mixed_genders")! as! NSString) as String)!,
+                                   commonLanguages: team.value(forKey: "common_languages")! as! String)
+                }
+            }
+        }
+        
+        task.resume()
+        
+    }
     
+    
+    // Called when a new member joins an existing team
+    func incrementTeamCounter( team: Team ) {
+        
+        // Make dictionary with ID and the increased counter
+        var dataDict = [:] as [String: Any]
+        
+        dataDict.updateValue(team.name!.replacingOccurrences(of: " ", with: "+"), forKey: "name")
+        dataDict.updateValue(String(team.current_users+1), forKey: "current_users")
+        dataDict.updateValue(String(team.max_users), forKey: "max_users")
+        dataDict.updateValue(team.age_group!, forKey: "age_group")
+        dataDict.updateValue(String(team.mixed_genders), forKey: "mixed_genders")
+        
+        // Replace commas and spaces to sanitize the post request
+        var langs = team.common_languages!
+        langs = langs.replacingOccurrences(of: " ", with: "+")
+        langs = langs.replacingOccurrences(of: ",", with: "%2C")
+        
+        dataDict.updateValue(langs, forKey: "common_languages")
+        
+        
+        // Create URL to post to
+        guard let teamUrl = URL(string: "http://tourist-team.appspot.com/saveteam") else {
+            print("Error: cannot create URL")
+            return
+        }
+        
+        // Request which is sent
+        // Specify POST and that it should fill out a form
+        let teamUrlRequest = NSMutableURLRequest(url: teamUrl as URL)
+        teamUrlRequest.httpMethod = "POST"
+        teamUrlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        // Put the data from the dictionary into a nice data string
+        // Place this string as the body of the request
+        let bodydata = "name=\(dataDict["name"]!)&current_users=\(dataDict["current_users"]!)&max_users=\(dataDict["max_users"]!)&age_group=\(dataDict["age_group"]!)&mixed_genders=\(dataDict["mixed_genders"]!)&common_languages=\(dataDict["common_languages"]!)"
+        teamUrlRequest.httpBody = bodydata.data(using: String.Encoding.utf8)
+        
+        
+        // Set up session
+        let task = URLSession.shared.dataTask(with: teamUrlRequest as URLRequest) {
+            (data, response, error) in
+            
+            if error != nil {
+                print(error!)
+                return
+            }
+        }
+        task.resume()
+    }
+    
+    
+    
+    func addLanguageToTeam(teamName: String) {}
+    
+    
+    // NOTE: Don't use this one
+    //       Better to use the GAE server
+    // Add a new line to one of the data files
+    /*func writeDataToEndOfTeamdataFile(fileName: String, data: Data) {
+        
+        // Get the data file path
+        let csvFilePath = Bundle.main.path(forResource: fileName, ofType: "csv")
+
+        if csvFilePath != nil {
+            
+            do {
+                // Enable file editing
+                let fileHandle: FileHandle? = FileHandle(forUpdatingAtPath: csvFilePath!)
+                
+                if fileHandle == nil {
+                    fatalError("File open failed")
+                
+                } else {
+                    // Go to the end of the file, 
+                    // write the data and save it
+                    fileHandle?.seekToEndOfFile()
+                    fileHandle?.write(data)
+                    fileHandle?.closeFile()
+                }
+            }
+        
+        } else {
+            fatalError("No data file found!")
+        }
+    }*/
+    
+    
+    // Update one of the attributes in a data file
+    /*func increaseNumberOfUsersInTeam(fileName: String,
+                                     selectedTeam: String) {
+        
+        
+        // Translate attribute name into position in data file
+        let numOfCommas = 1
+        
+        /*switch attribute {
+//        case "name":
+//            numOfCommas = 0
+        case "current_users":
+            numOfCommas = 1
+//        case "max_users":
+//            numOfCommas = 2
+//        case "age-group":
+//            numOfCommas = 3
+//        case "mixed_genders":
+//            numOfCommas = 4
+        case "common_languages":
+            numOfCommas = 5
+        default:
+            numOfCommas = -1
+        
+        }*/
+        
+        
+        // Get the data file path
+        let csvFilePath = Bundle.main.path(forResource: fileName, ofType: "csv")
+        
+        if csvFilePath != nil {
+            
+            /*var selectedRow:Array<String>? = nil // Our row of data
+            var index = 0                        // Index used when looping over row
+            var firstPos = 0                     // The first position of our region-of-interest
+            var lastPos = 0                      // The last position of our region-of-interest
+            var currentCommas = 0                // Current commas found when looping*/
+            
+            
+            /**
+             //   Access data file, increase current users and save the new data file
+             **/
+            
+            do {
+                let csvData = try String(contentsOfFile: csvFilePath!, encoding: String.Encoding.utf8)
+                let csvRows = csvData.csvRows()
+                
+                // Get desired team entity
+                for row in csvRows {
+                    if row[0] == selectedTeam {
+                        
+                        var editableRow = row
+                        
+                        var currentUsers = Int(editableRow[numOfCommas])!
+                        var maxUsers = Int(editableRow[numOfCommas+1])!
+                        
+                        // Increase current users in team if team is not full
+                        //currentUsers < Int(editableRow[2])! ? currentUsers += 1 : fatalError("Team is already full")
+                        
+                        print(row)
+                        
+                        print("Current users in \(selectedTeam) is \(currentUsers) out of a maximum of \(maxUsers)")
+                        
+                        
+                        
+                        
+                    }
+                }
+                /*
+                // Determine region-of-interest
+                // with first and last positions
+                for char in (selectedRow?[numOfCommas].characters)! {
+                    
+                    // If character in row is a comma
+                    if char == "," {
+                        
+                        // Check if we are in specified attribute location
+                        if currentCommas == numOfCommas {
+                            firstPos = index
+                            
+                            // If past the location, end loop
+                        } else if currentCommas > numOfCommas {
+                            lastPos = index
+                            break
+                            
+                            // Not reached location yet
+                        } else {
+                            currentCommas += 1
+                        }
+                        
+                        // Character is not a comma
+                    } else {
+                        index += 1
+                    }
+                }*/
+            } catch {
+                    print(error)
+            }
+            
+            /*print("First position: \(firstPos)")
+            print("Last position: \(lastPos)")
+            
+            print(selectedRow?[numOfCommas])
+            selectedRow?[numOfCommas] = "9"
+            print(selectedRow?[numOfCommas])
+            
+            
+            /**
+             //   STEP 2 - Seek to correct position in
+             //            filehandler and write the new data
+             **/
+            
+            do {
+                // Enable file editing
+                let fileHandle: FileHandle? = FileHandle(forUpdatingAtPath: csvFilePath!)
+                
+                // Check for errors
+                if fileHandle == nil {
+                    fatalError("File open failed")
+                    
+                } else {
+                        // Seek to specified entity
+                        fileHandle?.seek(toFileOffset: UInt64(20))
+                        fileHandle?.write(data)
+                        fileHandle?.closeFile()
+                
+                        
+                        // Seek to specified attribute
+                        
+                        
+                        
+                        // Update the attribute with the given data
+                        
+                        
+                        
+                        
+                    
+                }
+            }*/
+        }
+    }*/
+
 
 
 }

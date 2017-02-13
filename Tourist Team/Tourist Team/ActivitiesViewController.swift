@@ -223,6 +223,7 @@ class TeamChooserController: UITableViewController{
     
     var selectedIndex = 0
     
+    
     /*let simpleLangaugeShortener = ["English": "EN",
                                    "French": "FR",
                                    "Norgwegian": "NO"]*/
@@ -230,7 +231,11 @@ class TeamChooserController: UITableViewController{
     
     @IBOutlet weak var teamTableOutlet: UITableView!
     
+    
     override func viewDidLoad() {
+        
+        //activityAppDelegate.preloadDataFromServer()
+        
         super.viewDidLoad()
     }
     
@@ -245,8 +250,9 @@ class TeamChooserController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TeamCell", for: indexPath) as! TeamTableViewCell
         
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TeamCell",
+                                                 for: indexPath) as! TeamTableViewCell
         
         // Configure the cell...
         cell.teamTitleOutlet.text = teams[indexPath.row].name
@@ -291,6 +297,15 @@ class JoinTeamController: UIViewController {
     @IBOutlet weak var JoinTeamButtonOutlet: UIButton!
     
     
+    @IBAction func JoinTeamButton(_ sender: Any) {
+        
+        // Need logic to avoid joining same team. Maybe hide from list instead?
+        
+        activityAppDelegate.incrementTeamCounter(team: teams[selectedIndex])
+    }
+    
+    
+    
     var selectedIndex = 0
     
     override func viewDidLoad() {
@@ -319,6 +334,7 @@ class JoinTeamController: UIViewController {
         
         // Modify the "team up" with rounded edges
         JoinTeamButtonOutlet.layer.cornerRadius = 10.0
+        
     }
     
     

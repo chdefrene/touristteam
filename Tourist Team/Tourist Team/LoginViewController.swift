@@ -6,6 +6,10 @@
 //  Copyright © 2017 eurecom. All rights reserved.
 //
 import UIKit
+import CoreData
+
+let loginAppDelegate = UIApplication.shared.delegate as! AppDelegate
+fileprivate var persons:[Person] = loginAppDelegate.getPerson()
 
 class LoginViewController: UIViewController {
     
@@ -13,7 +17,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var Password: UITextField!
     @IBOutlet weak var Loginbtn: UIButton!
     
-    let useraccounts = ["Username": "Password", "User": "pass", "Test": "test"]
+    var foundUser:String = ""
+
+    
     
     
     override func viewDidLoad() {
@@ -47,22 +53,30 @@ class LoginViewController: UIViewController {
             let username = Username.text
             let password = Password.text
             
-            if (useraccounts[username!] != nil) {
-                //print("Username was found in useraccounts")
-                if (useraccounts[username!] == password ){
-                    //print ("access granted !")
+            
+            var i=0
+            for _ in persons{
+                i += 1
+            }
+            
+            var count = 0
+            while count < i {
+                if ((persons[count].username == username) && (persons[count].password == password)){
+                    print("access granted!")
+                    count += 1
+                    foundUser = username!
+                    break
                     
-                    // Move to Tab Bar View
-                    //performSegue(withIdentifier: "login", sender: nil)
                     
                 }else{
-                    //print("something wrong with password")
-                    wrongCredentials()
+                    print ("not the right user")
+                    count += 1
                 }
-            }else{
-                //print("username wasn't found")
-                wrongUsername()
             }
+            if foundUser == ""{
+                wrongCredentials()
+            }
+            
         }
     }
     
@@ -92,6 +106,16 @@ class LoginViewController: UIViewController {
             self.present(alertmessage, animated: true, completion: nil)
         }
     }
+    
+    //let personController = storyboard?.instantiateViewControllerWithIdentifier("PersonController") as! //ThirdViewController
+    //personController.selectedPerson = foundUser
+    
+    
+    //override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      //  let controller = segue.destination as! TableViewController
+        //controller.selectedPerson = foundUser
+    //}
+
     
     
 }

@@ -7,13 +7,55 @@
 //
 
 import UIKit
+import CoreData
+
+let personAppDelegate = UIApplication.shared.delegate as! AppDelegate
+fileprivate var persons:[Person] = personAppDelegate.getPerson()
 
 class ThirdViewController: UIViewController {
+    
 
+    @IBOutlet weak var personTitleOutlet: UILabel!
+    @IBOutlet weak var personAgeOutlet: UILabel!
+    @IBOutlet weak var personGenderOutlet: UILabel!
+    @IBOutlet weak var personLanguagesOutlet: UILabel!
+    @IBOutlet weak var personImageOutlet: UIImageView!
+    
+    var selectedPerson = "Chris"
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
+        var object = Person()
+        
+        //var object = persons[0]
+       
+    
+        for person in persons {
+            if person.username == selectedPerson{
+                object = person
+            }else{
+                //print("Person not found")
+            }
+        }
+        
+        
+        
+        
+        personTitleOutlet.text = object.name
+        personAgeOutlet.text = String(describing: object.age)
+        personGenderOutlet.text = object.gender
+        personLanguagesOutlet.text = object.languages
+        personImageOutlet.image = UIImage(named: object.image!)
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

@@ -11,6 +11,8 @@ import CoreData
 import Foundation
 
 
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -227,6 +229,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    // ============================================================
+    // =======================  PERSON  ===========================
+    // ============================================================
+    
+    func getPerson() -> [Person] {
+        
+        // Create a fetch request
+        let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+        
+        do {
+            // Get the results
+            let person = try getContext().fetch(fetchRequest)
+            
+            return person
+            
+        } catch {
+            fatalError("Error with request: \(error)")
+        }
+        
+    }
+    
+    func storePerson ( age: Int16,
+                     gender: String,
+                     image: String,
+                     languages: String,
+                     name: String,
+                     password: String,
+                     username: String) {
+        
+        let context = getContext()
+        
+        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
+        
+        // Set the values
+        person.setValue(age, forKey: "age")
+        person.setValue(gender, forKey: "gender")
+        person.setValue(image, forKey: "image")
+        person.setValue(languages, forKey: "languages")
+        person.setValue(name, forKey: "name")
+        person.setValue(password, forKey: "password")
+        person.setValue(username, forKey: "username")
+        
+        // Save object
+        do {
+            try context.save()
+        } catch let error as NSError {
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+    }
+    
+    
+    
+    func removePersonData() {
+        let context = self.getContext()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        
+        do {
+            let persons = try context.fetch(fetchRequest) as! [Person]
+            
+            for person in persons {
+                context.delete(person)
+            }
+        } catch let e as NSError? {
+            print("Failed to retrieve record: \(e!.localizedDescription)")
+        }
+    }
+    
+    
+    
+    
     
     
     
@@ -240,10 +312,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Clear data already in listview
         removeActivitiesData()
         //removeTeamData()
+        removePersonData()
         
         // Set filepath for data file
         let activityCsvPath = Bundle.main.path(forResource: "activityData", ofType: "csv")
         //let teamCsvPath = Bundle.main.path(forResource: "teamData", ofType: "csv")
+        let personCsvPath = Bundle.main.path(forResource: "personData", ofType: "csv")
         
         // No data file was found; exit method
         if activityCsvPath == nil {
@@ -251,29 +325,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         /*if teamCsvPath == nil {
             fatalError("No team data file found!")
+
         }*/
+
+        if personCsvPath == nil {
+            fatalError("No person data file found!")
+        }
         
         // Instantiate data varaible to hold row data
         var activityCsvData:String? = nil
         //var teamCsvData:String? = nil
-       
+        var personCsvData:String? = nil
+
         
         // Scan through data file, storing each row in the Core Data model
         do {
             activityCsvData = try String(contentsOfFile: activityCsvPath!,
                                  encoding: String.Encoding.utf8)
+
             //teamCsvData = try String(contentsOfFile: teamCsvPath!, encoding: String.Encoding.utf8)
+            personCsvData = try String(contentsOfFile: personCsvPath!,
+                                encoding: String.Encoding.utf8)
             
             // Call the csvRows method from the csvparser.swift helper file
             let activityCsvRows = activityCsvData?.csvRows()
             //let teamCsvRows = teamCsvData?.csvRows()
+            let personCsvRows = personCsvData?.csvRows()
             
             for row in activityCsvRows! {
                 
                 // Store scanned data in data model
                 self.storeActivity( name: row[0], latitude: Double(row[1])!, longitude: Double(row[2])!,information: row[3], link: row[4], image: row[5] )
             }
-            
+    
+            for row in personCsvRows! {
+    
+                // Store scanned data in data model
+                self.storePerson(age: Int16(row[0])!, gender: row[1], image: row[2], languages: row[3], name: row[4], password: row[5], username: row[6])
+            }
+
+    
         } catch {
             print(error)
         }
@@ -387,13 +478,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     
+/*
     func addLanguageToTeam(teamName: String) {}
     
     
     // NOTE: Don't use this one
     //       Better to use the GAE server
     // Add a new line to one of the data files
-    /*func writeDataToEndOfTeamdataFile(fileName: String, data: Data) {
+    func writeDataToEndOfTeamdataFile(fileName: String, data: Data) {
         
         // Get the data file path
         let csvFilePath = Bundle.main.path(forResource: fileName, ofType: "csv")
@@ -419,18 +511,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             fatalError("No data file found!")
         }
-    }*/
-    
-    
+    }
+*/
+/*
     // Update one of the attributes in a data file
-    /*func increaseNumberOfUsersInTeam(fileName: String,
+    func increaseNumberOfUsersInTeam(fileName: String,
                                      selectedTeam: String) {
         
         
         // Translate attribute name into position in data file
         let numOfCommas = 1
         
-        /*switch attribute {
+        switch attribute {
 //        case "name":
 //            numOfCommas = 0
         case "current_users":
@@ -446,7 +538,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         default:
             numOfCommas = -1
         
-        }*/
+        }
         
         
         // Get the data file path
@@ -490,7 +582,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         
                     }
                 }
-                /*
+ 
                 // Determine region-of-interest
                 // with first and last positions
                 for char in (selectedRow?[numOfCommas].characters)! {
@@ -516,12 +608,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     } else {
                         index += 1
                     }
-                }*/
+                }
             } catch {
                     print(error)
             }
             
-            /*print("First position: \(firstPos)")
+            print("First position: \(firstPos)")
             print("Last position: \(lastPos)")
             
             print(selectedRow?[numOfCommas])
@@ -560,11 +652,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         
                     
                 }
-            }*/
+            }
         }
-    }*/
+    }
 
-
-
+*/
 }
 

@@ -21,6 +21,7 @@
 		AAF595E51E352C5F000C11A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAF595E41E352C5F000C11A4 /* Assets.xcassets */; };
 		AAF595E81E352C5F000C11A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAF595E61E352C5F000C11A4 /* LaunchScreen.storyboard */; };
 		AAF595F01E353B10000C11A4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */; };
+		C2967B371E4DEDA50031C8B2 /* personData.csv in Resources */ = {isa = PBXBuildFile; fileRef = C2967B361E4DEDA50031C8B2 /* personData.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		AAF595E71E352C5F000C11A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AAF595E91E352C5F000C11A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAF595EF1E353B10000C11A4 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		C2967B361E4DEDA50031C8B2 /* personData.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = personData.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		AA661FB41E3D28990081B5CA /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				C2967B361E4DEDA50031C8B2 /* personData.csv */,
 				AAF595E61E352C5F000C11A4 /* LaunchScreen.storyboard */,
 				AAF595E91E352C5F000C11A4 /* Info.plist */,
 				AA661FB21E3D28920081B5CA /* csvparser.swift */,
@@ -177,6 +180,7 @@
 				AAF595E81E352C5F000C11A4 /* LaunchScreen.storyboard in Resources */,
 				AA661FB61E3D29550081B5CA /* activityData.csv in Resources */,
 				AAF595E51E352C5F000C11A4 /* Assets.xcassets in Resources */,
+				C2967B371E4DEDA50031C8B2 /* personData.csv in Resources */,
 				AAF595E31E352C5F000C11A4 /* Main.storyboard in Resources */,
 				AAD68FF81E47C7AC00912A57 /* teamData.csv in Resources */,
 			);

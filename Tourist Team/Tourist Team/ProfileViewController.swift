@@ -21,7 +21,7 @@ class ThirdViewController: UIViewController {
     @IBOutlet weak var personLanguagesOutlet: UILabel!
     @IBOutlet weak var personImageOutlet: UIImageView!
     
-    var selectedPerson = "Chris"
+    var selectedPerson = "Emma"
     
     
     
@@ -53,6 +53,10 @@ class ThirdViewController: UIViewController {
         personGenderOutlet.text = object.gender
         personLanguagesOutlet.text = object.languages
         personImageOutlet.image = UIImage(named: object.image!)
+        
+        personImageOutlet.layer.cornerRadius = personImageOutlet.frame.size.width / 2;
+        personImageOutlet.layer.borderWidth = 2.0;
+        
         
         
         

@@ -233,10 +233,10 @@ class TeamChooserController: UITableViewController{
     
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         
         //activityAppDelegate.preloadDataFromServer()
-        
-        super.viewDidLoad()
+        //tableView.reloadData()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -255,25 +255,40 @@ class TeamChooserController: UITableViewController{
                                                  for: indexPath) as! TeamTableViewCell
         
         // Configure the cell...
-        cell.teamTitleOutlet.text = teams[indexPath.row].name
-        cell.teamAgeGroupOutlet.text = "Ages: " + teams[indexPath.row].age_group!
         
-        if teams[indexPath.row].mixed_genders == true {
-            cell.teamMixedGendersOutlet.text = "Mixed"
-        } else {
-            cell.teamMixedGendersOutlet.text = "Non-mixed"
-        }
+        // Hide cells that have no free spaces  -   ISSUE: tableView can't 'skip' listing cells that have no free spaces.
+        let team = teams[indexPath.row]
         
-        cell.teamFreeSpacesOutlet.text = "Free: \(teams[indexPath.row].max_users - teams[indexPath.row].current_users)"
-        
-        
-        cell.teamLanguagesOutlet.text = teams[indexPath.row].common_languages
+        //if team.max_users - team.current_users > 1 {
+    
+            cell.teamTitleOutlet.text = team.name
+            cell.teamAgeGroupOutlet.text = "Ages: " + team.age_group!
+            
+            if team.mixed_genders == true {
+                cell.teamMixedGendersOutlet.text = "Mixed"
+            } else {
+                cell.teamMixedGendersOutlet.text = "Non-mixed"
+            }
+            
+            cell.teamFreeSpacesOutlet.text = "Free: \(team.max_users - team.current_users)"
+            
+            cell.teamLanguagesOutlet.text = team.common_languages
+        //}
 
         
         
         return cell
         
     }
+    
+    /*func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat {
+        let team = teams[indexPath.row]
+        
+        if team.max_users - team.current_users == 0 {
+            return 0
+        }
+        return 44
+    }*/
     
     // Pass the indexPath variable to the team chooser view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -302,6 +317,8 @@ class JoinTeamController: UIViewController {
         // Need logic to avoid joining same team. Maybe hide from list instead?
         
         activityAppDelegate.incrementTeamCounter(team: teams[selectedIndex])
+        
+        joinedTeam(team: teams[selectedIndex])
     }
     
     
@@ -326,8 +343,11 @@ class JoinTeamController: UIViewController {
         let freeSpaces = object.max_users - object.current_users
         if freeSpaces == 0 {
             FreeSpacesOutlet.text = "Team is full"
+            JoinTeamButtonOutlet.isEnabled = false
+            JoinTeamButtonOutlet.backgroundColor = UIColor.gray
         } else {
             FreeSpacesOutlet.text = "\(freeSpaces) spaces left"
+            JoinTeamButtonOutlet.isEnabled = true
         }
         
         CommonLanguagesOutlet.text = "Common languages: " + object.common_languages!
@@ -335,6 +355,23 @@ class JoinTeamController: UIViewController {
         // Modify the "team up" with rounded edges
         JoinTeamButtonOutlet.layer.cornerRadius = 10.0
         
+    }
+    
+    func joinedTeam(team:Team) -> Void {
+        let alertmessage = UIAlertController(title: "\(team.name!)", message: "Team joined successfully!", preferredStyle: .alert)
+        
+        let acceptAction = UIAlertAction(title: "Home", style: .default) { (_) -> Void in
+            let nv = self.storyboard!.instantiateViewController(withIdentifier: "tabBar")
+            self.present(nv, animated:false, completion:nil)
+        }
+        
+        present(alertmessage, animated: true, completion: nil)
+        //alertmessage.addAction(UIAlertAction(title: "Home", style: .default))
+        //present(alertmessage, animated: true, completion: nil)
+        /*if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }*/
+        alertmessage.addAction(acceptAction)
     }
     
     

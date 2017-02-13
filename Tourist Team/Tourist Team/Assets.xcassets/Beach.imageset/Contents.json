@@ -4,6 +4,7 @@
       "idiom" : "universal",
       "filename" : "8710052788_0c55624f48_b.jpg",
       "scale" : "1x"
+<<<<<<< HEAD
     },
     {
       "idiom" : "universal",
@@ -12,6 +13,8 @@
     {
       "idiom" : "universal",
       "scale" : "3x"
+=======
+>>>>>>> ad733a9bdb2bf14939cd85b1722fc7c7cb663033
     }
   ],
   "info" : {

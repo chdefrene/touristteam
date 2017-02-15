@@ -16,12 +16,48 @@ import Foundation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         preloadDataFromFile()
         preloadDataFromServer()
+        
+        
+        // Define some dummy relationships
+        
+        // 0    Marineland              A-team              David
+        // 1    Plage de la Gravette    Equipe Francais     Emma
+        // 2    Musée Picasso           Team Johaug         Jone
+        // 3    Absinthe Bar            Team mobserv        Chris
+        // 4    Dave's Trivia Night     Test team
+        // 5    The Hop Store
+
+        
+        // David, Emma in the A-team
+        //addPersonRelationships(fromIndex: 0, toIndex: 0) // David
+        //addPersonRelationships(fromIndex: 1, toIndex: 0) // Emma
+        
+        
+        
+        
+        
+        
+        // Add a relationship from second activity to second teamActivity
+        // => Marineland is in
+        //addActivityRelationships(fromIndex: 1, toIndex: 1)
+        
+        // Add a relationship from second team to second teamActivity,
+        // and to second person
+        /*addTeamRelationships(fromIndex: 1,
+                             toTeamActivityIndex: 1,
+                             toPersonIndex: 1)*/
+        
+        // Add a relationship from second person to second team
+        //addPersonRelationships(fromIndex: 1, toIndex: 1)
+        
+        
         
         return true
     }
@@ -158,8 +194,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    
-
+    func addActivityRelationships( fromIndex:Int,
+                                   toIndex:Int ) {
+        
+        let context = self.getContext()
+        let activityFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Activity")
+        let teamActivityFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TeamActivity")
+        
+        do {
+            let activity = try context.fetch(activityFetchRequest) as! [Activity]
+            let teamActivity = try context.fetch(teamActivityFetchRequest) as! [TeamActivity]
+            
+            activity[fromIndex].setValue(NSSet(object: teamActivity[toIndex]), forKey: "fromActivity")
+        
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+    }
     
     
     // ============================================================
@@ -225,6 +282,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         } catch let e as NSError? {
             print("Failed to retrieve record: \(e!.localizedDescription)")
+        }
+    }
+    
+    
+    // Check if 
+    func addTeamRelationships( fromIndex:Int,
+                               toTeamActivityIndex:Int,
+                               toPersonIndex:Int ) {
+        
+        let context = self.getContext()
+        let teamFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Team")
+        let teamActivityFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TeamActivity")
+        let personFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        
+        do {
+            let team = try context.fetch(teamFetchRequest) as! [Team]
+            
+            
+            let person = try context.fetch(personFetchRequest) as! [Person]
+            
+            let teamActivity = try context.fetch(teamActivityFetchRequest) as! [TeamActivity]
+            
+            
+            team[fromIndex].setValue(NSSet(object: teamActivity[toTeamActivityIndex]), forKey: "fromTeam")
+            team[fromIndex].setValue(NSSet(object: person[toPersonIndex]), forKey: "person")
+            
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            print(error)
         }
     }
     
@@ -295,6 +386,164 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Failed to retrieve record: \(e!.localizedDescription)")
         }
     }
+    
+    
+    func addPersonRelationships( fromIndex:Int,
+                                 toIndex:Int ) {
+        
+        let context = self.getContext()
+        
+        var person: NSManagedObject? = nil
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        do {
+            let persons = try context.execute(fetchRequest)
+        } catch {
+            print(error)
+        }
+        
+        /*if let person = person {
+            if person.valueForKey("name") == nil {
+                person.setValue("Shopping List", forKey: "name")
+            }
+            
+            if list.valueForKey("createdAt") == nil {
+                list.setValue(NSDate(), forKey: "createdAt")
+            }
+            
+            //let persons = person.mutableSetValue(forKey: "team")
+            
+            // Create Item Record
+            
+            //let entityDescription = NSEntityDescription.entity(forEntityName: "Person", in: context)
+            
+            if let person = NSManagedObject.entity() {
+                // Set Attributes
+                //item.setValue("Item \(items.count + 1)", forKey: "name")
+                //item.setValue(NSDate(), forKey: "createdAt")
+                
+                // Set Relationship
+                person.setValue(person, forKey: "team")
+                
+                // Add Item to Items
+                persons.addObject(person)
+            }
+            
+            
+            //print("number of items: \(items.count)")
+            //print("---")
+            
+            for itemRecord in persons {
+                print(person.value(forKey: "name"))
+            }
+        }*/
+        
+        
+        
+        /*let context = self.getContext()
+        let personFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        let teamFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Team")
+        
+        do {
+            let person = try context.fetch(personFetchRequest) as! [Person]
+            let team = try context.fetch(teamFetchRequest) as! [Team]
+            
+            
+            if let addPerson = createdRecord
+            
+            
+            //let addTeam = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
+
+            
+            let items = person[fromIndex].mutableSetValue(forKey: "team")
+            
+            for itemRecord in items {
+                
+            }
+            
+            items.add(team[toIndex])
+            
+
+            //person[fromIndex].team = NSMutableSet(object: team[toIndex])
+            
+            //person.setValue(NSSet(object: team[toIndex]), forKey: "team")
+        
+            
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }*/
+    }
+    
+    
+    // ============================================================
+    // ====================  TEAM ACTIVITY  =======================
+    // ============================================================
+    
+    
+    func getTeamActivity() -> [TeamActivity] {
+        
+        // Create a fetch request
+        let fetchRequest: NSFetchRequest<TeamActivity> = TeamActivity.fetchRequest()
+        
+        do {
+            // Get the results
+            let teamActivity = try getContext().fetch(fetchRequest)
+            
+            return teamActivity
+            
+        } catch {
+            fatalError("Error with request: \(error)")
+        }
+    }
+    
+    
+    func storeTeamActivity ( date: Date,
+                             startTime: Double,
+                             endTime: Double ) {
+        
+        let context = getContext()
+        
+        let teamActivity = NSEntityDescription.insertNewObject(forEntityName: "TeamActivity", into: context) as! TeamActivity
+        
+        // Set the values
+        teamActivity.setValue(date, forKey: "date")
+        teamActivity.setValue(startTime, forKey: "start_time")
+        teamActivity.setValue(endTime, forKey: "end_time")
+        
+        // Save object
+        do {
+            try context.save()
+            //print(activity.name!)
+        } catch let error as NSError {
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+    }
+    
+    func removeTeamActivitiesData() {
+        // Remove the existing items
+        let context = self.getContext()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TeamActivity")
+        
+        do {
+            let teamActivities = try context.fetch(fetchRequest) as! [TeamActivity]
+            
+            for teamActivity in teamActivities {
+                context.delete(teamActivity)
+            }
+        } catch let e as NSError? {
+            print("Failed to retrieve record: \(e!.localizedDescription)")
+        }
+    }
+    
+     
+    // Core data makes this automatically based on the other relationships !
+    
+    //func addTeamActivityRelationships( index:Int ) {}
     
     
     

@@ -11,15 +11,144 @@ import MapKit
 import CoreData
 
 
-// MARK: - Global variables and constants
-let activityAppDelegate = UIApplication.shared.delegate as! AppDelegate
+let viewAppDelegate = UIApplication.shared.delegate as! AppDelegate
 
-fileprivate var activities:[Activity] = activityAppDelegate.getActivity()
-fileprivate var teams:[Team] = activityAppDelegate.getTeam()
+fileprivate var activities:[Activity] = viewAppDelegate.getActivity()
+fileprivate var teams:[Team] = viewAppDelegate.getTeam()
+fileprivate var persons:[Person] = viewAppDelegate.getPerson()
+
+
+fileprivate var teamActivities:[TeamActivity] = viewAppDelegate.getTeamActivity()
+
+
+struct LoginSession {
+    static var loggedinUser:String = ""
+}
 
 
 
-// MARK: - MapView
+// MARK: Login view
+
+
+class LoginViewController: UIViewController {
+    
+    @IBOutlet weak var Username: UITextField!
+    @IBOutlet weak var Password: UITextField!
+    @IBOutlet weak var Loginbtn: UIButton!
+    
+    var foundUser:String = ""
+    
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    /*
+     // Navigation
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
+    @IBAction func loginAction(_ sender: Any) {
+        if ((Username.text == "") || (Password.text == "")) {
+            //print("Username or password is empty")
+            emptyCredentials()
+        }
+        if ((Username.text != nil) && (Password.text != nil)) {
+            //print ("you can login !")
+            let username = Username.text
+            let password = Password.text
+            
+            
+            var i=0
+            for _ in persons{
+                i += 1
+            }
+            
+            var count = 0
+            while count < i {
+                if ((persons[count].username == username) && (persons[count].password == password)){
+                    print("access granted!")
+                    count += 1
+                    foundUser = username!
+                    LoginSession.loggedinUser = username!
+                    break
+                    
+                    
+                }else{
+                    print ("not the right user")
+                    count += 1
+                }
+            }
+            if foundUser == ""{
+                wrongCredentials()
+            }
+            
+        }
+    }
+    
+    func emptyCredentials() -> Void {
+        let alertmessage = UIAlertController(title: "Login error", message: "Username or password field is empty, please try again.", preferredStyle: .alert)
+        alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
+    }
+    
+    func wrongCredentials() -> Void {
+        let alertmessage = UIAlertController(title: "Wrong credentials", message: "Your username and password do not match. Please try again.", preferredStyle: .alert)
+        alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
+    }
+    
+    func wrongUsername() -> Void {
+        let alertmessage = UIAlertController(title: "Wrong Username", message: "Your username is typed wrong.", preferredStyle: .alert)
+        alertmessage.addAction(UIAlertAction(title: "Okay", style: .default))
+        //present(alertmessage, animated: true, completion: nil)
+        if self.presentedViewController == nil {
+            self.present(alertmessage, animated: true, completion: nil)
+        }
+    }
+    
+    // Pass the loggedinUser variable to the team chooser view
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        let controller = segue.destination as! FirstViewController
+    //        controller.loggedinUser = LoginSession.loggedinUser
+    //    }
+    
+    //let personController = storyboard?.instantiateViewControllerWithIdentifier("PersonController") as! //ThirdViewController
+    //personController.selectedPerson = foundUser
+    
+    
+    //override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //  let controller = segue.destination as! TableViewController
+    //controller.selectedPerson = foundUser
+    //}
+    
+    
+    
+}
+
+
+
+// MARK: - Activities view
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
@@ -51,8 +180,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 }
 
 
-// MARK: - Tableview cell
-
 class ActivityTableViewCell: UITableViewCell {
     
     @IBOutlet var activityTitleOutlet: UILabel!
@@ -60,7 +187,6 @@ class ActivityTableViewCell: UITableViewCell {
     @IBOutlet var activityImageOutlet: UIImageView!
 }
 
-// MARK: - Tableview
 
 class TableViewController: UITableViewController {
     
@@ -98,18 +224,14 @@ class TableViewController: UITableViewController {
         
         if let IndexPath = self.tableView.indexPathForSelectedRow {
             let controller = segue.destination as! DetailViewController
-            controller.selectedIndex = IndexPath.row
+            controller.selectedActivitiesIndex = IndexPath.row
         }
     }
 }
 
 
-
-
-// MARK: - General setup
-
 class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDelegate {
-
+    
     // Outlets and actions
     @IBOutlet weak var tableViewContainer: UIView!
     @IBOutlet weak var mapViewContainer: UIView!
@@ -142,10 +264,9 @@ class FirstViewController: UIViewController, UITableViewDelegate, MKMapViewDeleg
 }
 
 
-
 class DetailViewController: UIViewController {
     
-    var selectedIndex = 0
+    var selectedActivitiesIndex = 0
     
     @IBOutlet weak var detailImageOutlet: UIImageView!
     @IBOutlet weak var detailNameOutlet: UILabel!
@@ -157,7 +278,7 @@ class DetailViewController: UIViewController {
     
     
     @IBAction func linkTapped(_ sender: Any) {
-        let targetURL = NSURL(string: activities[selectedIndex].link!)
+        let targetURL = NSURL(string: activities[selectedActivitiesIndex].link!)
         UIApplication.shared.open(targetURL as! URL)
         
     }
@@ -174,7 +295,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         // Get selected activity
-        let object = activities[selectedIndex]
+        let object = activities[selectedActivitiesIndex]
         
         // Display activity image
         if object.image != nil {
@@ -203,7 +324,7 @@ class DetailViewController: UIViewController {
     // Pass the indexPath variable to the team chooser view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let controller = segue.destination as! TeamChooserController
-        controller.selectedIndex = selectedIndex
+        controller.selectedActivitiesIndex = selectedActivitiesIndex
     }
     
 }
@@ -221,7 +342,8 @@ class TeamTableViewCell: UITableViewCell {
 
 class TeamChooserController: UITableViewController{
     
-    var selectedIndex = 0
+    var selectedTeamsIndex = 0
+    var selectedActivitiesIndex = 0
     
     
     /*let simpleLangaugeShortener = ["English": "EN",
@@ -294,7 +416,8 @@ class TeamChooserController: UITableViewController{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let controller = segue.destination as! JoinTeamController
         if let IndexPath = self.tableView.indexPathForSelectedRow {
-            controller.selectedIndex = IndexPath.row
+            controller.selectedTeamsIndex = IndexPath.row
+            controller.selectedActivitiesIndex = selectedActivitiesIndex
         }
     }
     
@@ -316,20 +439,35 @@ class JoinTeamController: UIViewController {
         
         // Need logic to avoid joining same team. Maybe hide from list instead?
         
-        activityAppDelegate.incrementTeamCounter(team: teams[selectedIndex])
+        // Increment team counter
+        viewAppDelegate.incrementTeamCounter(team: teams[selectedTeamsIndex])
         
-        joinedTeam(team: teams[selectedIndex])
+        // Add relationships between user and team
+        //viewAppDelegate.addPersonRelationships(fromIndex: selectedIndex, toIndex: selectedIndex)
+                                                                            // WRONG INDEX: This must be 
+                                                                            // fetched from model instead
+        let loggedinUser = LoginSession.loggedinUser
+        
+        
+        print("Logged in user: \(loggedinUser)")
+        
+        print("You have joined team \(teams[selectedTeamsIndex].name!) for activity \(activities[selectedActivitiesIndex].name!)")
+        
+        
+        // Display alert to user
+        joinedTeam(team: teams[selectedTeamsIndex])
     }
     
     
     
-    var selectedIndex = 0
+    var selectedTeamsIndex = 0
+    var selectedActivitiesIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Get selected activity
-        let object = teams[selectedIndex]
+        let object = teams[selectedTeamsIndex]
         
         TeamNameOutlet.text = object.name
         AgeGroupOutlet.text = "Ages " + object.age_group!
@@ -374,11 +512,159 @@ class JoinTeamController: UIViewController {
         alertmessage.addAction(acceptAction)
     }
     
+}
+
+
+
+// MARK: Teams view
+
+class MyTeamsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var teamNameOutlet: UILabel!
+    @IBOutlet weak var teamAgeGroupOutlet: UILabel!
+    @IBOutlet weak var teamMixedGendersOutlet: UILabel!
+    @IBOutlet weak var teamFreeSpacesOutlet: UILabel!
+    @IBOutlet weak var teamCommonLanguagesOutlet: UILabel!
+}
+
+
+class MyTeamsController: UITableViewController{
     
     
+    
+    
+    
+    
+    @IBOutlet weak var teamTableOutlet: UITableView!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //activityAppDelegate.preloadDataFromServer()
+        //tableView.reloadData()
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // Return the number of sections.
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return teams.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyTeamsCell",
+                                                 for: indexPath) as! MyTeamsTableViewCell
+        
+        
+        
+        return cell
+        
+    }
+    
+    
+    // Pass the indexPath variable to the team chooser view
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     let controller = segue.destination as! JoinTeamController
+     if let IndexPath = self.tableView.indexPathForSelectedRow {
+     controller.selectedIndex = IndexPath.row
+     }
+     }*/
+    
+}
+
+
+
+class SecondViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
     
 }
 
 
+
+
+// MARK: Person view
+
+
+class ThirdViewController: UIViewController {
+    
+    
+    @IBOutlet weak var personTitleOutlet: UILabel!
+    @IBOutlet weak var personAgeOutlet: UILabel!
+    @IBOutlet weak var personGenderOutlet: UILabel!
+    @IBOutlet weak var personLanguagesOutlet: UILabel!
+    @IBOutlet weak var personImageOutlet: UIImageView!
+    
+    var selectedPerson = LoginSession.loggedinUser
+    
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+        
+        
+        var object = Person()
+        
+        //var object = persons[0]
+        
+        
+        for person in persons {
+            if person.username == selectedPerson{
+                object = person
+            }else{
+                //print("Person not found")
+            }
+        }
+        
+        
+        
+        
+        personTitleOutlet.text = object.name
+        personAgeOutlet.text = String(describing: object.age)
+        personGenderOutlet.text = object.gender
+        personLanguagesOutlet.text = object.languages
+        personImageOutlet.image = UIImage(named: object.image!)
+        
+        personImageOutlet.layer.cornerRadius = personImageOutlet.frame.size.width / 2;
+        personImageOutlet.layer.borderWidth = 2.0;
+        
+        
+        
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
+}
 

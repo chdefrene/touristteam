@@ -525,17 +525,15 @@ class MyTeamsTableViewCell: UITableViewCell {
     @IBOutlet weak var teamMixedGendersOutlet: UILabel!
     @IBOutlet weak var teamFreeSpacesOutlet: UILabel!
     @IBOutlet weak var teamCommonLanguagesOutlet: UILabel!
+    
 }
 
 
 class MyTeamsController: UITableViewController{
     
-    
-    
-    
-    
-    
     @IBOutlet weak var teamTableOutlet: UITableView!
+    
+    
     
     
     override func viewDidLoad() {
@@ -543,6 +541,7 @@ class MyTeamsController: UITableViewController{
         
         //activityAppDelegate.preloadDataFromServer()
         //tableView.reloadData()
+        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -559,6 +558,30 @@ class MyTeamsController: UITableViewController{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyTeamsCell",
                                                  for: indexPath) as! MyTeamsTableViewCell
+        
+        // Get users teams
+        let object = teams[indexPath.row]
+            
+            cell.teamNameOutlet.text = object.name
+            cell.teamAgeGroupOutlet.text = "Ages " + object.age_group!
+            
+            if object.mixed_genders {
+                cell.teamMixedGendersOutlet.text = "Mixed genders"
+            } else {
+                cell.teamMixedGendersOutlet.text = "Non-mixed genders"
+            }
+            
+            let freeSpaces = object.max_users - object.current_users
+            if freeSpaces == 0 {
+                cell.teamFreeSpacesOutlet.text = "Team is full"
+                //JoinTeamButtonOutlet.isEnabled = false
+                //JoinTeamButtonOutlet.backgroundColor = UIColor.gray
+            } else {
+                cell.teamFreeSpacesOutlet.text = "\(freeSpaces) spaces left"
+                //JoinTeamButtonOutlet.isEnabled = true
+            }
+            
+            cell.teamCommonLanguagesOutlet.text = object.common_languages!
         
         
         
